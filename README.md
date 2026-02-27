@@ -17,7 +17,7 @@ A modern, responsive web application for managing college clubs, members, events
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/CLUB-HUB-GECP.git
+https://github.com/AdityaKr7/club-hub-gecp.git
 cd CLUB-HUB-GECP
 ```
 
