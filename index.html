@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLUB HUB GECP - Campus Club Management</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Authentication Container -->
+  <div id="auth-container" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>CLUB HUB GECP</h1>
+        <p class="subtitle">Campus Club Management System</p>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="auth-tabs">
+        <button class="tab-btn active" data-tab="login">Login</button>
+        <button class="tab-btn" data-tab="register">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-tab" class="tab-content active">
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input 
+              type="email" 
+              id="login-email" 
+              name="email" 
+              placeholder="you@example.com" 
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input 
+              type="password" 
+              id="login-password" 
+              name="password" 
+              placeholder="Enter your password" 
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Login</button>
+          <div id="login-error" class="error-message"></div>
+          
+          <div style="margin-top: 15px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; font-size: 13px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: #60a5fa;">Demo Accounts:</div>
+            <div style="margin-bottom: 5px;">
+              <strong>Admin:</strong> adminch@gmail.com / admin1234
+            </div>
+            <div>
+              <strong>Member:</strong> member@gmail.com / member1234
+            </div>
+          </div>
+          
+          <div class="divider">
+            <span>OR</span>
+          </div>
+          
+          <button type="button" id="skip-login-btn" class="btn btn-secondary">
+            Skip Login (Demo)
+          </button>
+        </form>
+      </div>
+
+      <!-- Registration Form -->
+      <div id="register-tab" class="tab-content">
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="register-name">Full Name</label>
+            <input 
+              type="text" 
+              id="register-name" 
+              name="fullName" 
+              placeholder="John Doe" 
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input 
+              type="email" 
+              id="register-email" 
+              name="email" 
+              placeholder="you@example.com" 
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="register-password">Password (min 6 characters)</label>
+            <input 
+              type="password" 
+              id="register-password" 
+              name="password" 
+              placeholder="Create a password" 
+              minlength="6"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="register-confirm">Confirm Password</label>
+            <input 
+              type="password" 
+              id="register-confirm" 
+              name="confirmPassword" 
+              placeholder="Confirm your password" 
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Register</button>
+          <div id="register-error" class="error-message"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Container (hidden until authenticated) -->
+  <div id="app-container" class="app-container" style="display: none;">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>CLUB HUB</h2>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="dashboard">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">Dashboard</span>
+        </button>
+        <button class="nav-item" data-section="clubs">
+          <span class="nav-icon">🎯</span>
+          <span class="nav-text">Browse Clubs</span>
+        </button>
+        <button class="nav-item" data-section="my-clubs">
+          <span class="nav-icon">✨</span>
+          <span class="nav-text">My Clubs</span>
+        </button>
+        <button class="nav-item" data-section="events">
+          <span class="nav-icon">📅</span>
+          <span class="nav-text">Events</span>
+        </button>
+        <button class="nav-item" data-section="notices">
+          <span class="nav-icon">📰</span>
+          <span class="nav-text">Notices</span>
+        </button>
+        <button class="nav-item" data-section="admin">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-text">Admin Panel</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">U</div>
+          <div class="user-info">
+            <p class="user-name" id="sidebar-user-name">User</p>
+            <p class="user-email" id="sidebar-user-email">user@example.com</p>
+          </div>
+        </div>
+        <button class="btn-logout" id="logout-btn">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="content-section active">
+        <div class="page-header">
+          <h1>Welcome to CLUB HUB</h1>
+          <p class="page-subtitle">Manage and discover campus clubs</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-info">
+              <p class="stat-label">Total Clubs</p>
+              <p class="stat-value" id="total-clubs">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">✨</div>
+            <div class="stat-info">
+              <p class="stat-label">My Clubs</p>
+              <p class="stat-value" id="my-clubs-count">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-info">
+              <p class="stat-label">Upcoming Events</p>
+              <p class="stat-value" id="upcoming-events-count">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-section-block">
+          <h2>Recent Notices</h2>
+          <div id="recent-notices" class="notices-list">
+            <p class="empty-state">No notices yet</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Browse Clubs Section -->
+      <section id="clubs-section" class="content-section">
+        <div class="page-header">
+          <h1>Browse Clubs</h1>
+          <p class="page-subtitle">Discover and join campus clubs</p>
+        </div>
+
+        <div id="clubs-list" class="clubs-grid">
+          <p class="empty-state">Loading clubs...</p>
+        </div>
+      </section>
+
+      <!-- My Clubs Section -->
+      <section id="my-clubs-section" class="content-section">
+        <div class="page-header">
+          <h1>My Clubs</h1>
+          <p class="page-subtitle">Clubs you are a member of</p>
+        </div>
+
+        <div id="my-clubs-list" class="clubs-grid">
+          <p class="empty-state">You haven't joined any clubs yet</p>
+        </div>
+      </section>
+
+      <!-- Events Section -->
+      <section id="events-section" class="content-section">
+        <div class="page-header">
+          <h1>Events</h1>
+          <p class="page-subtitle">Upcoming club events</p>
+        </div>
+
+        <div id="events-list" class="events-grid">
+          <p class="empty-state">No events scheduled</p>
+        </div>
+      </section>
+
+      <!-- Notices Section -->
+      <section id="notices-section" class="content-section">
+        <div class="page-header">
+          <h1>Notices</h1>
+          <p class="page-subtitle">All club notices in one place</p>
+        </div>
+
+        <div id="all-notices-list" class="notices-list">
+          <p class="empty-state">No notices available</p>
+        </div>
+      </section>
+
+      <!-- Admin Panel Section -->
+      <section id="admin-section" class="content-section">
+        <div class="page-header">
+          <h1>Admin Panel</h1>
+          <p class="page-subtitle">Manage clubs you administer</p>
+        </div>
+
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" data-admin-tab="clubs-manage">Manage Clubs</button>
+          <button class="admin-tab-btn" data-admin-tab="notices">Publish Notices</button>
+          <button class="admin-tab-btn" data-admin-tab="create-event">Create Event</button>
+        </div>
+
+        <div id="clubs-manage-tab" class="admin-tab-content active">
+          <div id="admin-clubs-list">
+            <p class="empty-state">You have no admin rights</p>
+          </div>
+        </div>
+
+        <div id="notices-tab" class="admin-tab-content">
+          <form id="notice-form" class="admin-form">
+            <h3>Publish a Notice</h3>
+            <div class="form-group">
+              <label for="notice-club">Select Club</label>
+              <select id="notice-club" required></select>
+            </div>
+            <div class="form-group">
+              <label for="notice-title">Title</label>
+              <input type="text" id="notice-title" placeholder="Notice title" required />
+            </div>
+            <div class="form-group">
+              <label for="notice-content">Content</label>
+              <textarea id="notice-content" placeholder="Notice content" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publish Notice</button>
+            <div id="notice-error" class="error-message"></div>
+          </form>
+        </div>
+
+        <div id="create-event-tab" class="admin-tab-content">
+          <form id="event-form" class="admin-form">
+            <h3>Create Event</h3>
+            <div class="form-group">
+              <label for="event-club">Select Club</label>
+              <select id="event-club" required></select>
+            </div>
+            <div class="form-group">
+              <label for="event-title">Event Title</label>
+              <input type="text" id="event-title" placeholder="Event title" required />
+            </div>
+            <div class="form-group">
+              <label for="event-description">Description</label>
+              <textarea id="event-description" placeholder="Event description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="event-date">Date & Time</label>
+              <input type="datetime-local" id="event-date" required />
+            </div>
+            <div class="form-group">
+              <label for="event-location">Location</label>
+              <input type="text" id="event-location" placeholder="Event location" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Create Event</button>
+            <div id="event-error" class="error-message"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Club Details Modal -->
+    <div id="club-details-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <button class="modal-close" id="close-club-modal">✕</button>
+        <div class="modal-header">
+          <div class="club-icon" style="font-size: 48px; margin-right: 20px;">🎯</div>
+          <div>
+            <h2 id="club-details-name">Club Name</h2>
+            <p id="club-details-description">Club description</p>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <!-- Admin Tools -->
+          <div id="club-admin-tools" class="modal-section" style="display: none;">
+            <h3>Admin Tools</h3>
+            <div class="modal-form">
+              <div class="form-group">
+                <label for="club-edit-name">Club Name</label>
+                <input type="text" id="club-edit-name" placeholder="Club name" />
+              </div>
+              <div class="form-group">
+                <label for="club-edit-description">Description</label>
+                <textarea id="club-edit-description" rows="3" placeholder="Club description"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="club-edit-icon">Icon (emoji)</label>
+                <input type="text" id="club-edit-icon" placeholder="💻" maxlength="2" />
+              </div>
+              <button type="button" class="btn btn-primary" id="save-club-details">Save Changes</button>
+              <div id="club-admin-error" class="error-message"></div>
+            </div>
+          </div>
+
+          <!-- Members Section -->
+          <div class="modal-section">
+            <h3>Members</h3>
+            <div id="club-members-list" style="display: flex; flex-direction: column; gap: 10px;">
+              <p class="empty-state">Loading members...</p>
+            </div>
+          </div>
+
+          <!-- Recent Notices Section -->
+          <div class="modal-section">
+            <h3>Recent Notices</h3>
+            <div id="club-notices-list" style="display: flex; flex-direction: column; gap: 10px;">
+              <p class="empty-state">No notices yet</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="club-details-action-btn">View More</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('club-details-modal').style.display = 'none'">Close</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading-spinner" class="loading-spinner" style="display: none;">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Firebase SDK (V9 Modular) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
